@@ -1,9 +1,18 @@
-# Copyright(C) 2025 Advanced Micro Devices, Inc. All rights reserved.
+# Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 
 #environment_variables:
 #- "HSA_OVERRIDE_GFX_VERSION=11.0.0"  # Required for HIP to write kernels
 
+# Forwarded from host env by ryzers (see ConfigManager.configs_to_buildflags).
+# Required to download the gated google/paligemma-3b-pt-224.
+build_arguments:
+- "HF_TOKEN="
+
 # Map huggingface cache so we don't need to re-download models
 volume_mappings:
 - "~/.cache/huggingface/:/root/.cache/huggingface/"
+- "$PWD/packages/vla/openpi/mounted:/ryzers/mounted"
+
+docker_extra_run_flags:
+- "-e HF_TOKEN"

@@ -4,26 +4,21 @@ This directory contains the docker configuration files to run [openpi from Physi
 
 ### Build and run the Docker Image
 
+1. To run pure software inference from dataset
 ```sh
-ryzers build openai
-ryzers run
+export HF_TOKEN=hf_xxxxxxxxxxxxxxxxx   # token that has accepted PaliGemma license
+cd Ryzers/
+
+# for inference only
+ryzers build openpi
+ryzers run "python /ryzers/mounted/test_inference.py"
+
+# for inference on so101
+sudo chmod 666 /dev/ttyACM*
+sudo chmod 666 /dev/video*
+
+ryzers build lerobot openpi
+ryzers run "python /ryzers/mounted/test_inference_with_so101.py"
 ```
 
-### Running other models
-
-For example, to download and convert pi0.5 use the following commands:
-
-```
-cd /ryzers/openpi
-
-# Download
-uv run scripts/serve_policy.py --download-only policy:checkpoint --policy.config=pi05_droid --policy.dir=gs://openpi-assets/checkpoints/pi05_droid
-
-# Convert JAX model to PyTorch
-uv run examples/convert_jax_model_to_pytorch.py \
-    --checkpoint_dir /root/.cache/openpi/openpi-assets/checkpoints/pi05_droid \
-    --config_name pi05_droid \
-    --output_path /root/.cache/openpi/openpi-assets/checkpoints/pi05_droid
-```
-
-Copyright(C) 2025 Advanced Micro Devices, Inc. All rights reserved.
+Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
