@@ -95,3 +95,6 @@ snapshot_download(
 # has_legacy_hub_download_metadata() returns True and forces a re-fetch.
 shutil.rmtree(os.path.join(local_libero, ".cache"), ignore_errors=True)
 PY
+
+COPY test_inference.py /ryzers/test_inference.py
+COPY test_inference_with_so101.py /ryzers/test_inference_with_so101.py

@@ -34,9 +34,6 @@ RUN git clone https://github.com/huggingface/lerobot.git \
 
 RUN pip install "numpy<2" pytest huggingface_hub num2words ninja
 
-# COPY test.sh /ryzers/test_lerobot.sh
-# RUN chmod +x /ryzers/test_lerobot.sh
-
 # # Create an entrypoint to autmatically login to Hugging Face on docker start
 # RUN echo -e '#!/bin/bash\n\
 # if [ -n "$HF_TOKEN" ]; then\n\
@@ -47,4 +44,7 @@ RUN pip install "numpy<2" pytest huggingface_hub num2words ninja
 # exec "$@"' > /ryzers/entrypoint.sh && chmod +x /ryzers/entrypoint.sh
 
 # ENTRYPOINT ["/ryzers/entrypoint.sh"]
-# CMD /ryzers/test_lerobot.sh
+
+COPY test.sh /ryzers/test_lerobot.sh
+RUN chmod +x /ryzers/test_lerobot.sh
+CMD /ryzers/test_lerobot.sh

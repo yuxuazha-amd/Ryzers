@@ -12,7 +12,7 @@ build_arguments:
 # Map huggingface cache so we don't need to re-download models
 volume_mappings:
 - "~/.cache/huggingface/:/root/.cache/huggingface/"
-- "$PWD/packages/vla/openpi/mounted:/ryzers/openpi_mounted"
+# - "$PWD/packages/vla/openpi/mounted:/ryzers/openpi_mounted"
 
 docker_extra_run_flags:
 - "-e HF_TOKEN"
