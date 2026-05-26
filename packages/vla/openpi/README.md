@@ -11,7 +11,7 @@ cd Ryzers/
 
 # for inference only
 ryzers build openpi
-ryzers run "python /ryzers/test_inference.py"
+ryzers run
 
 # for inference on so101
 sudo chmod 666 /dev/ttyACM*
@@ -19,6 +19,9 @@ sudo chmod 666 /dev/video*
 
 ryzers build lerobot openpi
 ryzers run "python /ryzers/test_inference_with_so101.py"
+
+# test flash attention
+ryzers run "python /ryzers/test_flash_attention.py"
 ```
 
 Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.

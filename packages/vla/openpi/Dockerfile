@@ -98,3 +98,6 @@ PY
 
 COPY test_inference.py /ryzers/test_inference.py
 COPY test_inference_with_so101.py /ryzers/test_inference_with_so101.py
+COPY test_flash_attention.py /ryzers/test_flash_attention.py
+
+CMD ["python3", "/ryzers/test_inference.py"]
