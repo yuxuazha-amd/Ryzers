@@ -1,13 +1,57 @@
 #!/usr/bin/env python3
 # Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
-
+from huggingface_hub import snapshot_download
+import os
+import shutil
 import torch
 
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
 from lerobot.policies.factory import make_pre_post_processors
 from lerobot.policies.pi0 import PI0Policy
 
+
+"""Download policy and dataset from HuggingFace"""
+tok = os.environ["HF_TOKEN"]
+
+# Models (HF Hub cache layout — fine for transformers/from_pretrained)
+snapshot_download("lerobot/pi0_base", repo_type="model", token=tok)
+snapshot_download(
+    "google/paligemma-3b-pt-224", repo_type="model", token=tok,
+    allow_patterns=[
+        "config.json", "generation_config.json",
+        "preprocessor_config.json", "processor_config.json",
+        "special_tokens_map.json", "added_tokens.json",
+        "tokenizer.json", "tokenizer.model", "tokenizer_config.json",
+        "*.txt",
+    ],
+)
+
+# Dataset: stage at the path LeRobotDataset looks at locally.
+lerobot_home = os.environ.get(
+    "HF_LEROBOT_HOME",
+    os.path.join(os.environ["HF_HOME"], "lerobot"),
+)
+local_libero = os.path.join(lerobot_home, "lerobot", "libero")
+os.makedirs(local_libero, exist_ok=True)
+snapshot_download(
+    "lerobot/libero",
+    repo_type="dataset",
+    token=tok,
+    local_dir=local_libero,
+    allow_patterns=[
+        "meta/**",
+        "data/chunk-000/file-000.parquet",
+        "videos/*/chunk-000/file-000.mp4",
+    ]
+)
+
+# CRITICAL: remove the local_dir bookkeeping dir; otherwise lerobot's
+# has_legacy_hub_download_metadata() returns True and forces a re-fetch.
+shutil.rmtree(os.path.join(local_libero, ".cache"), ignore_errors=True)
+
+
+"""Load policy and dataset"""
 # load a policy
 model_id = "lerobot/pi0_base"  # <- swap checkpoint
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -30,16 +74,14 @@ preprocess, postprocess = make_pre_post_processors(
 # load a lerobotdataset
 dataset = LeRobotDataset("lerobot/libero", episodes=[0])
 
+
+"""Test inference"""
 # pick an episode
 episode_index = 0
-
 # each episode corresponds to a contiguous range of frame indices
 from_idx = dataset.meta.episodes["dataset_from_index"][episode_index]
-to_idx   = dataset.meta.episodes["dataset_to_index"][episode_index]
-
 # get a single frame from that episode (e.g. the first frame)
-frame_index = from_idx
-frame = dict(dataset[frame_index])
+frame = dict(dataset[from_idx])
 
 batch = preprocess(frame)
 with torch.inference_mode():

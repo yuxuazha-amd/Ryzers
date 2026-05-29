@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
-
+from huggingface_hub import snapshot_download
+import os
 import torch
 
 from lerobot.cameras.configs import Cv2Backends
@@ -14,6 +15,24 @@ from lerobot.policies.utils import build_inference_frame, make_robot_action
 from lerobot.robots.so_follower import SO101Follower, SO101FollowerConfig
 
 
+"""Download policy and dataset from HuggingFace"""
+tok = os.environ["HF_TOKEN"]
+
+# Models (HF Hub cache layout — fine for transformers/from_pretrained)
+snapshot_download("lerobot/pi0_base", repo_type="model", token=tok)
+snapshot_download(
+    "google/paligemma-3b-pt-224", repo_type="model", token=tok,
+    allow_patterns=[
+        "config.json", "generation_config.json",
+        "preprocessor_config.json", "processor_config.json",
+        "special_tokens_map.json", "added_tokens.json",
+        "tokenizer.json", "tokenizer.model", "tokenizer_config.json",
+        "*.txt",
+    ],
+)
+
+
+"""Load policy and connect to so101"""
 # load lerobot so101
 camera_devices = {
     "side": "/dev/video0",
@@ -57,6 +76,7 @@ preprocess, postprocess = make_pre_post_processors(
 )
 
 
+"""Test inference"""
 action_features = hw_to_dataset_features(robot.action_features, "action")
 obs_features = hw_to_dataset_features(robot.observation_features, "observation")
 dataset_features = {**action_features, **obs_features}
