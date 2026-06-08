@@ -3,7 +3,7 @@
 
 # Make sure calibration is persistent and models are available after ryzer exit
 volume_mappings:
-- "~/.cache/huggingface/lerobot/calibration/:/opt/hf-cache/lerobot/calibration"
+- "~/.cache/huggingface/:/root/.cache/huggingface/"
 
 docker_extra_run_flags:
 - "$(for d in /dev/ttyACM* /dev/video*; do [ -e \"$d\" ] && printf -- '--device=%s ' \"$d\"; done)"

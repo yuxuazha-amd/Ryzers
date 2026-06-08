@@ -8,7 +8,7 @@ To verify the lerobot installation simply run the built ryzer -- this will run o
 
 ```bash
 ryzers build lerobot
-ryzers run "bash /ryzers/lerobot_mounted/test.sh"
+ryzers run
 ```
 
 ## Training and Controlling Robot Arms

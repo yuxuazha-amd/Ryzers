@@ -1,14 +1,5 @@
 # Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-# Forwarded from host env by ryzers (see ConfigManager.configs_to_buildflags).
-# Required to download the gated google/paligemma-3b-pt-224.
-build_arguments:
-- "HF_TOKEN="
-
-# Map huggingface cache so we don't need to re-download models
-volume_mappings:
-- "~/.cache/huggingface/:/root/.cache/huggingface/"
-
 docker_extra_run_flags:
 - "-e HF_TOKEN"

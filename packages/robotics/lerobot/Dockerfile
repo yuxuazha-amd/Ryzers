@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
 # Setup LeRobot
 RUN git clone https://github.com/huggingface/lerobot.git \
     && cd lerobot \
-    && git checkout 1396b9fa \
+    && git checkout v0.5.1 \
     && sed -i '/"torch[>=<~ ]*/d' pyproject.toml \
     && sed -i '/"torchvision[>=<~ ]*/d' pyproject.toml \
     && pip install -e ".[all]"
@@ -36,4 +36,4 @@ RUN pip install "numpy<2" pytest huggingface_hub num2words ninja
 
 COPY test.sh /ryzers/test_lerobot.sh
 RUN chmod +x /ryzers/test_lerobot.sh
-CMD /ryzers/test_lerobot.sh
+CMD ["bash", "/ryzers/test_lerobot.sh"]
