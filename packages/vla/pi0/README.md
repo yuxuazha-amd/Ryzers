@@ -11,7 +11,7 @@ sudo chmod 666 /dev/ttyACM*
 sudo chmod 666 /dev/video*
 
 cd Ryzers/
-ryzers build lerobot openpi
+ryzers build lerobot pi0
 
 """for inference only"""
 ryzers run
