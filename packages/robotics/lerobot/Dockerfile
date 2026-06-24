@@ -35,5 +35,4 @@ RUN git clone https://github.com/huggingface/lerobot.git \
 RUN pip install "numpy<2" pytest huggingface_hub num2words ninja
 
 COPY test.sh /ryzers/test_lerobot.sh
-RUN chmod +x /ryzers/test_lerobot.sh
 CMD ["bash", "/ryzers/test_lerobot.sh"]

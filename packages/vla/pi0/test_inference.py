@@ -12,7 +12,9 @@ from lerobot.policies.pi0 import PI0Policy
 
 
 """Download policy and dataset from HuggingFace"""
-tok = os.environ["HF_TOKEN"]
+tok = os.environ.get("HF_TOKEN")
+if not tok:
+    raise RuntimeError("Error: HF_TOKEN is required, please provide an HF_TOKEN with permission to download PaliGemma. Set it with: HF_TOKEN=<token> ryzers run <args>")
 
 # Pin pi0_base to the last revision compatible with lerobot v0.5.1
 # (the commit BEFORE "Add relative action processor steps", #6, Jun 3 2026).
