@@ -59,8 +59,11 @@ shutil.rmtree(os.path.join(local_libero, ".cache"), ignore_errors=True)
 """Load policy and dataset"""
 # load a policy
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-policy = PI0Policy.from_pretrained(local_pi0).to(device).eval()
-preprocess, postprocess = make_pre_post_processors(
+policy = PI0Policy.from_pretrained(
+    local_pi0, 
+    cli_overrides=["--dtype", "bfloat16"],
+).to(device).eval()
+preprocessor, postprocessor = make_pre_post_processors(
     policy.config,
     local_pi0,
     preprocessor_overrides={
@@ -73,6 +76,10 @@ preprocess, postprocess = make_pre_post_processors(
         },
     },
 )
+processor = {
+    "preprocessor": preprocessor,
+    "postprocessor": postprocessor,
+}
 # load a lerobotdataset
 dataset = LeRobotDataset("lerobot/libero", episodes=[0])
 
@@ -85,10 +92,10 @@ from_idx = dataset.meta.episodes["dataset_from_index"][episode_index]
 # get a single frame from that episode (e.g. the first frame)
 frame = dict(dataset[from_idx])
 
-batch = preprocess(frame)
+batch = processor["preprocessor"](frame)
 with torch.inference_mode():
     pred_action = policy.select_action(batch)
     # use your policy postprocess, this post process the action
     # for instance unnormalize the actions, detokenize it etc..
-    pred_action = postprocess(pred_action)
+    pred_action = processor["postprocessor"](pred_action)
     print("Predicted action:", pred_action)
