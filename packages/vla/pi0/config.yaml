@@ -1,5 +1,0 @@
-# Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
-# SPDX-License-Identifier: MIT
-
-docker_extra_run_flags:
-- "-e HF_TOKEN"
