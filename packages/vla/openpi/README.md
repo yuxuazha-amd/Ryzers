@@ -2,18 +2,22 @@
 
 This directory contains the docker configuration files to run [openpi from Physical Intelligence](https://github.com/Physical-Intelligence/openpi).
 
-### Build and run the Docker Image
+---
+
+### Openpi from Physical-Intelligence
+
+#### Build and run the Docker Image
 
 ```sh
-ryzers build openai
+ryzers build openpi
 ryzers run
 ```
 
-### Running other models
+#### Run other models
 
 For example, to download and convert pi0.5 use the following commands:
 
-```
+```sh
 cd /ryzers/openpi
 
 # Download
@@ -26,4 +30,24 @@ uv run examples/convert_jax_model_to_pytorch.py \
     --output_path /root/.cache/openpi/openpi-assets/checkpoints/pi05_droid
 ```
 
-Copyright(C) 2025 Advanced Micro Devices, Inc. All rights reserved.
+---
+
+### Openpi from LeRobot
+
+#### Build and run the Docker Image
+
+```sh
+sudo chmod 666 /dev/ttyACM*
+sudo chmod 666 /dev/video*
+
+ryzers build lerobot openpi
+
+HF_TOKEN=<token> ryzers run <args>
+
+"""e.g. for inference only"""
+HF_TOKEN=<token> ryzers run
+"""e.g. for inference on lerobot so101"""
+HF_TOKEN=<token> ryzers run "python /ryzers/lerobot_so101_openpi.py"
+```
+
+Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
