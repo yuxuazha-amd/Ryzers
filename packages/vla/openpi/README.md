@@ -45,7 +45,7 @@ ryzers build lerobot openpi
 HF_TOKEN=<token> ryzers run <args>
 
 """e.g. for inference only"""
-HF_TOKEN=<token> ryzers run
+HF_TOKEN=<token> ryzers run "python /ryzers/lerobot_openpi.py"
 """e.g. for inference on lerobot so101"""
 HF_TOKEN=<token> ryzers run "python /ryzers/lerobot_so101_openpi.py"
 ```

@@ -4,6 +4,5 @@
 docker_extra_run_flags:
 - "-e HF_TOKEN"
 
-# Map huggingface cache so we don't need to re-download models
-volume_mappings:
-- "~/.cache/huggingface/:/root/.cache/huggingface/"
+environment_variables:
+- "GCSFS_TOKEN=anon"
