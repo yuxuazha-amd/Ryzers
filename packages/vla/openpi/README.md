@@ -47,7 +47,7 @@ HF_TOKEN=<token> ryzers run <args>
 """e.g. for inference only"""
 HF_TOKEN=<token> ryzers run
 """e.g. for inference on lerobot so101"""
-HF_TOKEN=<token> ryzers run "python /ryzers/test_inference_with_so101.py"
+HF_TOKEN=<token> ryzers run "python /ryzers/lerobot_so101_openpi.py"
 ```
 
 Copyright(C) 2026 Advanced Micro Devices, Inc. All rights reserved.
